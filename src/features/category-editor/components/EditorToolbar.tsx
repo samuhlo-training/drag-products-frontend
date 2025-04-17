@@ -11,42 +11,34 @@ const EditorToolbar: React.FC = () => {
   const handleZoomOut = () => setZoomLevel(zoomLevel - 0.1);
 
   return (
-    <div className="bg-gray-100 p-2 mb-4 flex justify-between items-center sticky top-0 z-10 shadow">
-      <div>
-        {/* Placeholder para añadir productos disponibles */}
-        <span className="text-sm mr-4 italic text-gray-500">
-          Productos disponibles (próximamente)
-        </span>
-      </div>
-      <div className="flex items-center justify-end flex-wrap gap-2">
+    <div className="bg-gray-100 p-2 mb-4 px-2 flex justify-between items-center sticky top-0 z-10 shadow">
+      <button
+        onClick={addRow}
+        className="bg-green-400 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm mr-2"
+      >
+        Añadir Fila
+      </button>
+      <div className="flex items-center justify-end">
         <button
-          onClick={addRow}
-          className="bg-green-400 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm mr-2"
+          onClick={handleZoomOut}
+          disabled={zoomLevel <= 0.2} // Limite inferior
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm mr-1 disabled:opacity-50"
         >
-          Añadir Fila
+          -
         </button>
-        <div className="flex items-center justify-end">
-          <button
-            onClick={handleZoomOut}
-            disabled={zoomLevel <= 0.2} // Limite inferior de zoom
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm mr-1 disabled:opacity-50"
-          >
-            -
-          </button>
-          <span className="text-sm font-bold ml-1 hidden [@media(min-width:610px)]:inline">
-            Zoom
-          </span>
-          <span className="text-sm font-bold mx-1">
-            {(zoomLevel * 100).toFixed(0)}%
-          </span>
-          <button
-            onClick={handleZoomIn}
-            disabled={zoomLevel >= 2.0} // Limite superior de zoom
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm ml-1 disabled:opacity-50"
-          >
-            +
-          </button>
-        </div>
+        <span className="text-sm font-bold ml-1 hidden [@media(min-width:610px)]:inline">
+          Zoom
+        </span>
+        <span className="text-sm font-bold mx-1">
+          {(zoomLevel * 100).toFixed(0)}%
+        </span>
+        <button
+          onClick={handleZoomIn}
+          disabled={zoomLevel >= 2.0} // Limite superior
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm ml-1 disabled:opacity-50"
+        >
+          +
+        </button>
       </div>
     </div>
   );
