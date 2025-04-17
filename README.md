@@ -53,8 +53,9 @@ npm run dev
 
 ## 📸 Vista Previa
 
-[Captura de pantalla del editor de categorías]
-
+<p align="center">
+  <img src="public/portada_editorcategorias.webp" alt="Portada Editor Categorías" width="500"/>
+</p>
 ---
 
-Desarrollado como prueba técnica por Samuel Hernández.
+Desarrollado como prueba técnica por Samu Lo.
