@@ -1,54 +1,60 @@
-# React + TypeScript + Vite
+# 🛒 Pacman Frontend - Editor de Categorías
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/React-18-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-Latest-purple?logo=vite)
+![Zustand](https://img.shields.io/badge/Zustand-Latest-yellow)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Latest-38B2AC?logo=tailwind-css)
 
-Currently, two official plugins are available:
+## 📝 Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Editor visual de categorías para e-commerce que permite organizar productos en filas con diferentes plantillas de alineación.
 
-## Expanding the ESLint configuration
+## ✨ Características
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Gestión de Filas**: Añadir y eliminar filas de productos
+- **Plantillas de Alineación**: Organizar productos con alineación izquierda, centro o derecha
+- **Gestión de Productos**: Añadir y eliminar productos en cada fila (máximo 3 por fila)
+- **Control de Zoom**: Ajustar el nivel de zoom para visualizar mejor el diseño
+- **UI Responsiva**: Interfaz adaptable a diferentes tamaños de pantalla
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🛠️ Tecnologías
+
+- **React**: Biblioteca para construir interfaces de usuario
+- **TypeScript**: Tipado estático para JavaScript
+- **Zustand**: Gestión de estado ligera y sencilla
+- **TailwindCSS**: Framework CSS utilitario
+- **Vite**: Herramienta de construcción rápida
+
+## 🏗️ Arquitectura
+
+```
+src/
+├── features/
+│   └── category-editor/     # Módulo principal
+│       ├── components/      # Componentes UI
+│       └── types.ts         # Definiciones de tipos
+└── store/
+    └── categoryStore.ts     # Estado global con Zustand
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Instalación y Uso
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Clonar el repositorio
+git clone https://github.com/samuhlo-training/pacman-frontend.git
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
 ```
+
+## 📸 Vista Previa
+
+[Captura de pantalla del editor de categorías]
+
+---
+
+Desarrollado como prueba técnica por Samuel Hernández.

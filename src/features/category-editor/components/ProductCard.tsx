@@ -35,12 +35,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
       {/* Más adelante aquí irá la lógica de D&D (atributos draggable, etc.) */}
       {/* Botón de eliminar */}
       <button
-        className="absolute top-[-8px] right-[-8px] m-1 bg-red-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs hover:bg-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-[5px] right-[6px] m-1 bg-red-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-700 opacity-0 group-hover:opacity-100 transition-opacity"
         onClick={handleDeleteProduct}
         aria-label={`Eliminar ${product.name}`}
         title={`Eliminar ${product.name}`}
       >
-        &times;
+        X
       </button>
     </div>
   );

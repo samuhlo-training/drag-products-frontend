@@ -80,7 +80,7 @@ const Row: React.FC<RowProps> = ({ row }) => {
 
   return (
     // Relative para posicionar elementos absolutos hijos
-    <div className="border border-dashed border-gray-400 p-4 mb-4 bg-gray-50 relative min-h-[150px]">
+    <div className="border border-dashed border-gray-400 p-4 mb-2 bg-gray-50 relative min-h-[150px]">
       <div className="absolute top-1 left-2 text-xs text-gray-500 z-10 flex items-center gap-2">
         {" "}
         <span>
@@ -135,14 +135,14 @@ const Row: React.FC<RowProps> = ({ row }) => {
 
       {/* CONTENEDOR PRODUCTOS */}
       <div
-        className={`flex ${getAlignmentClass()} flex-wrap gap-4 mt-8 pt-2 min-h-[120px]`}
+        className={`flex ${getAlignmentClass()} flex-wrap gap-4 mt-3 pt-2 min-h-[120px]`}
       >
         {row.products.length > 0 ? (
           row.products.map((product) => (
             <ProductCard key={product.id} product={product} rowId={row.id} />
           ))
         ) : (
-          <div className="text-gray-400 w-full text-center flex flex-col items-center justify-center mb-10">
+          <div className="text-gray-400 w-full text-center flex flex-col items-center justify-center mb-5">
             Fila vacía
           </div>
         )}
