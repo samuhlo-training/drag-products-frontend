@@ -18,31 +18,35 @@ const EditorToolbar: React.FC = () => {
           Productos disponibles (próximamente)
         </span>
       </div>
-      <div>
+      <div className="flex items-center justify-end flex-wrap gap-2">
         <button
           onClick={addRow}
           className="bg-green-400 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm mr-2"
         >
           Añadir Fila
         </button>
-
-        <button
-          onClick={handleZoomOut}
-          disabled={zoomLevel <= 0.2} // Limite inferior de zoom
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm mr-1 disabled:opacity-50"
-        >
-          -
-        </button>
-        <span className="text-sm font-bold mx-1">
-          Zoom {(zoomLevel * 100).toFixed(0)}%
-        </span>
-        <button
-          onClick={handleZoomIn}
-          disabled={zoomLevel >= 2.0} // Limite superior de zoom
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm ml-1 disabled:opacity-50"
-        >
-          +
-        </button>
+        <div className="flex items-center justify-end">
+          <button
+            onClick={handleZoomOut}
+            disabled={zoomLevel <= 0.2} // Limite inferior de zoom
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm mr-1 disabled:opacity-50"
+          >
+            -
+          </button>
+          <span className="text-sm font-bold ml-1 hidden [@media(min-width:610px)]:inline">
+            Zoom
+          </span>
+          <span className="text-sm font-bold mx-1">
+            {(zoomLevel * 100).toFixed(0)}%
+          </span>
+          <button
+            onClick={handleZoomIn}
+            disabled={zoomLevel >= 2.0} // Limite superior de zoom
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm ml-1 disabled:opacity-50"
+          >
+            +
+          </button>
+        </div>
       </div>
     </div>
   );

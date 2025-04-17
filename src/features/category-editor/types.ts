@@ -18,6 +18,7 @@ export interface EditorRow {
 export interface CategoryState {
   rows: EditorRow[];
   zoomLevel: number;
+  availableProducts: Product[];
   // Next: añadir availableProducts si los obtienes de una API/lista
 }
 
@@ -25,5 +26,9 @@ export interface CategoryActions {
   addRow: () => void;
   deleteRow: (rowId: RowId) => void;
   setZoomLevel: (level: number) => void;
+  setRowTemplate: (rowId: RowId, template: TemplateAlignment | null) => void;
+  deleteProduct: (productId: ProductId, rowId: RowId) => void;
+  addProductToRow: (productBase: Product, rowId: RowId) => void;
+  availableProducts: Product[];
   // ... acciones para productos
 }
