@@ -26,12 +26,14 @@ const Row: React.FC<RowProps> = ({ row }) => {
     isDragging: isRowDragging,
   } = useSortable({ id: row.id });
 
+  const zoomLevel = useCategoryStore((state) => state.zoomLevel);
+
   const rowStyle = {
     transform: CSS.Transform.toString(rowTransform),
     transition: rowTransition,
     zIndex: isRowDragging ? 50 : undefined,
     opacity: isRowDragging ? 0.7 : 1,
-    cursor: "default",
+    cursor: zoomLevel <= 0.5 ? "grab" : "default",
   };
 
   // Estado local para controlar la visibilidad del selector de productos
@@ -107,73 +109,81 @@ const Row: React.FC<RowProps> = ({ row }) => {
     }
   }
 
+  // --- DRAG LISTENERS SEGUN ZOOM ---
+  const dragListeners =
+    zoomLevel <= 0.5 ? { ...rowAttributes, ...rowListeners } : {};
+
   return (
     <div
       ref={setRowNodeRef}
       style={rowStyle}
       className={`border border-dashed border-gray-400 p-4 mb-2 bg-white relative min-h-[150px]`}
+      {...dragListeners}
     >
-      {/* DRAG HANDLE DE LA FILA */}
-      <div className="absolute top-1 left-2 text-xs text-gray-500 z-10 flex items-center gap-2">
-        <button
-          type="button"
-          {...rowAttributes}
-          {...rowListeners}
-          className=" m-1 bg-gray-200 text-gray-700 rounded-full w-7 h-7 flex items-center justify-center text-base hover:bg-gray-400 active:bg-gray-500 cursor-grab opacity-80 hover:opacity-100 z-30"
-          tabIndex={0}
-          title="Mover fila"
-          aria-label="Mover fila"
-          style={{ touchAction: "none" }}
-        >
-          <span className="text-[22px] line-height-[1] mb-[3px]">☰</span>
-        </button>
-        <span>
-          ID: {row.id.substring(0, 6)} - Plantilla: {row.template || "Ninguna"}
-        </span>
-        <span> | </span>
-        <select
-          className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
-          value={row.template || ""}
-          onChange={handleTemplateChange}
-          aria-label="Seleccionar plantilla de alineación"
-        >
-          <option value="">Sin plantilla</option>
-          <option value="left">Izquierda</option>
-          <option value="center">Centro</option>
-          <option value="right">Derecha</option>
-        </select>
-        <button
-          className="hover:scale-110 transition-transform cursor-pointer text-lg"
-          onClick={handleDeleteRow}
-          title="Eliminar Fila"
-          aria-label={`Eliminar fila ${row.id.substring(0, 6)}`}
-        >
-          🗑️
-        </button>
-      </div>
-      <div className="flex items-center justify-end" ref={selectorRef}>
-        <button
-          onClick={() => setIsSelectorOpen(!isSelectorOpen)}
-          disabled={isRowFull}
-          className="bg-green-400 hover:bg-green-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center disabled:bg-gray-400 cursor-pointer disabled:cursor-not-allowed"
-          title={
-            isRowFull
-              ? "La fila está llena (máx. 3 productos)"
-              : "Añadir producto"
-          }
-          aria-label="Añadir producto"
-        >
-          +
-        </button>
-        {isSelectorOpen && (
-          <ProductSelector
-            availableProducts={availableProducts}
-            usedProducts={allRows.flatMap((r) => r.products)}
-            onProductSelect={handleProductSelected}
-            onClose={() => setIsSelectorOpen(false)}
-          />
-        )}
-      </div>
+      {/*Barra de herramientas fila */}
+      {zoomLevel > 0.5 && (
+        <div className="absolute top-1 left-2 text-xs text-gray-500 z-10 flex items-center gap-2">
+          <button
+            type="button"
+            {...(zoomLevel > 0.5 ? { ...rowAttributes, ...rowListeners } : {})}
+            className=" m-1 bg-gray-200 text-gray-700 rounded-full w-7 h-7 flex items-center justify-center text-base hover:bg-gray-400 active:bg-gray-500 cursor-grab opacity-80 hover:opacity-100 z-30"
+            tabIndex={0}
+            title="Mover fila"
+            aria-label="Mover fila"
+            style={{ touchAction: "none" }}
+          >
+            <span className="text-[22px] line-height-[1] mb-[3px]">☰</span>
+          </button>
+          <span>
+            ID: {row.id.substring(0, 6)} - Plantilla: {row.template || "Ninguna"}
+          </span>
+          <span> | </span>
+          <select
+            className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+            value={row.template || ""}
+            onChange={handleTemplateChange}
+            aria-label="Seleccionar plantilla de alineación"
+          >
+            <option value="">Sin plantilla</option>
+            <option value="left">Izquierda</option>
+            <option value="center">Centro</option>
+            <option value="right">Derecha</option>
+          </select>
+          <button
+            className="hover:scale-110 transition-transform cursor-pointer text-lg"
+            onClick={handleDeleteRow}
+            title="Eliminar Fila"
+            aria-label={`Eliminar fila ${row.id.substring(0, 6)}`}
+          >
+            🗑️
+          </button>
+        </div>
+      )}
+      {zoomLevel > 0.5 && (
+        <div className="flex items-center justify-end" ref={selectorRef}>
+          <button
+            onClick={() => setIsSelectorOpen(!isSelectorOpen)}
+            disabled={isRowFull}
+            className="bg-green-400 hover:bg-green-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center disabled:bg-gray-400 cursor-pointer disabled:cursor-not-allowed"
+            title={
+              isRowFull
+                ? "La fila está llena (máx. 3 productos)"
+                : "Añadir producto"
+            }
+            aria-label="Añadir producto"
+          >
+            +
+          </button>
+          {isSelectorOpen && (
+            <ProductSelector
+              availableProducts={availableProducts}
+              usedProducts={allRows.flatMap((r) => r.products)}
+              onProductSelect={handleProductSelected}
+              onClose={() => setIsSelectorOpen(false)}
+            />
+          )}
+        </div>
+      )}
       {/* DndContext y SortableContext para productos */}
       <DndContext onDragEnd={handleDragEnd}>
         <SortableContext

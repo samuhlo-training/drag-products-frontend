@@ -11,6 +11,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
   const deleteProduct = useCategoryStore((state) => state.deleteProduct);
+  const zoomLevel = useCategoryStore((state) => state.zoomLevel);
 
   const {
     attributes,
@@ -26,7 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
     transition,
     zIndex: isDragging ? 100 : undefined,
     opacity: isDragging ? 0.7 : 1,
-    cursor: "default",
+    cursor: zoomLevel < 0.5 ? "grab" : "default",
   };
 
   const handleDeleteProduct = (e: React.MouseEvent) => {
@@ -34,11 +35,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
     deleteProduct(product.id, rowId);
   };
 
+  // --- DRAG LISTENERS SEGUN ZOOM ---
+  const dragListeners = zoomLevel < 0.5 ? { ...attributes, ...listeners } : {};
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      // correcion de animacion
       className={`p-1 flex flex-col items-center justify-start basis-[120px] min-w-[120px] max-w-[200px] flex-1
         relative group
         ${
@@ -47,20 +50,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
             : "hover:scale-105 hover:rounded-sm hover:shadow-md cursor-pointer transition-transform"
         }
       `}
+      {...dragListeners}
     >
       {/* DRAG HANDLER*/}
-      <button
-        type="button"
-        {...attributes}
-        {...listeners}
-        className="absolute left-[6px] top-[5px] m-1 bg-gray-200 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-400 active:bg-gray-500 cursor-grab opacity-70 hover:opacity-100 z-0"
-        tabIndex={0}
-        title="Mover producto"
-        aria-label="Mover producto"
-        style={{ touchAction: "none" }}
-      >
-        <span className="text-[16px] line-height-[1] mb-[1px]">☰</span>
-      </button>
+      {zoomLevel >= 0.5 && (
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          className="absolute left-[6px] top-[5px] m-1 bg-gray-200 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-400 active:bg-gray-500 cursor-grab opacity-70 hover:opacity-100 z-0"
+          tabIndex={0}
+          title="Mover producto"
+          aria-label="Mover producto"
+          style={{ touchAction: "none" }}
+        >
+          <span className="text-[16px] line-height-[1] mb-[1px]">☰</span>
+        </button>
+      )}
       <img
         src={product.imageUrl || "/src/assets/placeholder.jpg"}
         alt={product.name}
@@ -74,15 +80,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
         {product.price} EUR
       </p>
       {/* Botón de eliminar */}
-      <button
-        className="absolute top-[5px] right-[6px] m-1 bg-red-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-700 opacity-0 group-hover:opacity-100 transition-opacity z-20"
-        onClick={handleDeleteProduct}
-        aria-label={`Eliminar ${product.name}`}
-        title={`Eliminar ${product.name}`}
-        tabIndex={0}
-      >
-        X
-      </button>
+      {zoomLevel >= 0.5 && (
+        <button
+          type="button"
+          className="absolute top-[5px] right-[6px] m-1 bg-red-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-700 opacity-0 group-hover:opacity-100 transition-opacity z-20"
+          onClick={handleDeleteProduct}
+          aria-label={`Eliminar ${product.name}`}
+          title={`Eliminar ${product.name}`}
+          tabIndex={0}
+        >
+          X
+        </button>
+      )}
     </div>
   );
 };
