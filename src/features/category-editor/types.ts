@@ -7,6 +7,7 @@ export interface Product {
   name: string;
   price: number; //
   imageUrl: string;
+  baseId?: ProductId; // id del producto base, solo presente en instancias de filas
 }
 
 export interface EditorRow {

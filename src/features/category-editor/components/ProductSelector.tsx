@@ -3,26 +3,36 @@ import { Product } from "../types";
 
 interface ProductSelectorProps {
   availableProducts: Product[];
+  usedProducts: Product[];
   onProductSelect: (product: Product) => void;
   onClose: () => void;
 }
 
 const ProductSelector: React.FC<ProductSelectorProps> = ({
   availableProducts,
+  usedProducts,
   onProductSelect,
   onClose,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filtrar segun busqueda =! todos
+  // Filtrar productos ya presentes en cualquier fila por baseId
+  const filteredAvailableProducts = useMemo(() => {
+    if (!usedProducts) return availableProducts;
+    return availableProducts.filter(
+      (product) => !usedProducts.some((p) => p.baseId === product.id)
+    );
+  }, [availableProducts, usedProducts]);
+
+  // Filtrar además por búsqueda
   const filteredProducts = useMemo(() => {
     if (!searchTerm) {
-      return availableProducts;
+      return filteredAvailableProducts;
     }
-    return availableProducts.filter((product) =>
+    return filteredAvailableProducts.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [availableProducts, searchTerm]);
+  }, [filteredAvailableProducts, searchTerm]);
 
   const handleSelect = (product: Product) => {
     onProductSelect(product); // callback a store

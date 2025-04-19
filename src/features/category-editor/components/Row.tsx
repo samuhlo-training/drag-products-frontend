@@ -39,6 +39,7 @@ const Row: React.FC<RowProps> = ({ row }) => {
   const availableProducts = useCategoryStore(
     (state) => state.availableProducts
   );
+  const allRows = useCategoryStore((state) => state.rows);
   // -----------------------------------------------------------------
 
   // Función para determinar la alineación de la fila (sin cambios)
@@ -127,6 +128,7 @@ const Row: React.FC<RowProps> = ({ row }) => {
         {isSelectorOpen && (
           <ProductSelector
             availableProducts={availableProducts}
+            usedProducts={allRows.flatMap((r) => r.products)}
             onProductSelect={handleProductSelected}
             onClose={() => setIsSelectorOpen(false)}
           />

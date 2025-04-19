@@ -9,7 +9,7 @@ import {
   RowId,
 } from "../features/category-editor/types";
 
-// --- Datos Fake Iniciales
+// --- Datos Fake ---
 const initialProducts: Product[] = [
   {
     id: uuidv4(),
@@ -47,28 +47,118 @@ const initialProducts: Product[] = [
     price: 39.95,
     imageUrl: "/photos/imagen-modelo-6.jpg",
   },
+  {
+    id: uuidv4(),
+    name: "Conjunto vestido negro",
+    price: 89.95,
+    imageUrl: "/photos/imagen-modelo-7.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Falda plisada azul",
+    price: 34.95,
+    imageUrl: "/photos/imagen-modelo-8.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Camisa lino blanca",
+    price: 44.95,
+    imageUrl: "/photos/imagen-modelo-9.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Chaqueta vaquera clásica",
+    price: 69.95,
+    imageUrl: "/photos/imagen-modelo-10.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Vestido flores primavera",
+    price: 59.95,
+    imageUrl: "/photos/imagen-modelo-11.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Shorts deportivos",
+    price: 24.95,
+    imageUrl: "/photos/imagen-modelo-12.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Sudadera oversize gris",
+    price: 49.95,
+    imageUrl: "/photos/imagen-modelo-13.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Abrigo largo camel",
+    price: 109.95,
+    imageUrl: "/photos/imagen-modelo-14.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Jersey trenzado beige",
+    price: 39.95,
+    imageUrl: "/photos/imagen-modelo-15.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Mono corto estampado",
+    price: 54.95,
+    imageUrl: "/photos/imagen-modelo-16.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Top de tirantes",
+    price: 19.95,
+    imageUrl: "/photos/imagen-modelo-17.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Pantalón cargo verde",
+    price: 59.95,
+    imageUrl: "/photos/imagen-modelo-18.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Camisa cuadros rojos",
+    price: 29.95,
+    imageUrl: "/photos/imagen-modelo-19.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Falda midi floral",
+    price: 44.95,
+    imageUrl: "/photos/imagen-modelo-20.jpg",
+  },
+  {
+    id: uuidv4(),
+    name: "Camiseta básica negra",
+    price: 14.95,
+    imageUrl: "/photos/imagen-modelo-21.jpg",
+  },
 ];
 
 const initialRows: EditorRow[] = [
   {
     id: uuidv4(),
-    products: [{ ...initialProducts[0], id: uuidv4() }],
+    products: [{ ...initialProducts[0], id: uuidv4(), baseId: initialProducts[0].id }],
     template: "right",
   },
   {
     id: uuidv4(),
     products: [
-      { ...initialProducts[1], id: uuidv4() },
-      { ...initialProducts[2], id: uuidv4() },
+      { ...initialProducts[1], id: uuidv4(), baseId: initialProducts[1].id },
+      { ...initialProducts[2], id: uuidv4(), baseId: initialProducts[2].id },
     ],
     template: "left",
   },
   {
     id: uuidv4(),
     products: [
-      { ...initialProducts[3], id: uuidv4() },
-      { ...initialProducts[4], id: uuidv4() },
-      { ...initialProducts[5], id: uuidv4() },
+      { ...initialProducts[3], id: uuidv4(), baseId: initialProducts[3].id },
+      { ...initialProducts[4], id: uuidv4(), baseId: initialProducts[4].id },
+      { ...initialProducts[5], id: uuidv4(), baseId: initialProducts[5].id },
     ],
     template: "center",
   },
@@ -123,6 +213,15 @@ export const useCategoryStore = create<CategoryState & CategoryActions>(
     // AÑADIR PRODUCTO A LA FILA
     addProductToRow: (productBase: Product, rowId: RowId) =>
       set((state) => {
+        // Evitar productos repetidos en cualquier fila
+        const isUsed = state.rows.some((row) =>
+          row.products.some((p) => p.baseId === productBase.id)
+        );
+        if (isUsed) {
+          console.warn(`El producto con id ${productBase.id} ya está en alguna fila.`);
+          return state;
+        }
+
         // Encontrar la fila y verificar el límite
         const targetRowIndex = state.rows.findIndex((row) => row.id === rowId);
         if (targetRowIndex === -1) return state; // Fila no encontrada (improbable)
@@ -131,14 +230,15 @@ export const useCategoryStore = create<CategoryState & CategoryActions>(
         if (targetRow.products.length >= 3) {
           console.warn(
             `La fila ${rowId} ya tiene 3 productos. No se puede añadir más.`
-          ); // O mostrar un mensaje al usuario
-          return state; // Límite alcanzado, no hacer nada
+          );
+          return state;
         }
 
-        // Crear una nueva instancia del producto con un ID único
+        // Crear una nueva instancia del producto (id único y baseId)
         const newProductInstance: Product = {
-          ...productBase, // Copia las propiedades base (name, price, imageUrl)
-          id: uuidv4(), // Genera un NUEVO ID único para esta instancia
+          ...productBase,
+          id: uuidv4(),
+          baseId: productBase.id,
         };
 
         // Actualizar la fila de forma inmutable
