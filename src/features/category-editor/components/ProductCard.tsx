@@ -53,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
         type="button"
         {...attributes}
         {...listeners}
-        className="absolute left-[6px] top-[5px] m-1 bg-gray-200 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-400 active:bg-gray-500 cursor-grab opacity-70 hover:opacity-100 z-20"
+        className="absolute left-[6px] top-[5px] m-1 bg-gray-200 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-gray-400 active:bg-gray-500 cursor-grab opacity-70 hover:opacity-100 z-0"
         tabIndex={0}
         title="Mover producto"
         aria-label="Mover producto"
