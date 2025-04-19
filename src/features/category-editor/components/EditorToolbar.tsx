@@ -10,6 +10,7 @@ const EditorToolbar: React.FC = () => {
   const zoomLevel = useCategoryStore((state) => state.zoomLevel);
   const setZoomLevel = useCategoryStore((state) => state.setZoomLevel);
   const deleteRow = useCategoryStore((state) => state.deleteRow);
+  const autoFillRows = useCategoryStore((state) => state.autoFillRows);
 
   // Filtro de productos disponibles
   const usedBaseIds = rows.flatMap((row) => row.products.map((p) => p.baseId));
@@ -49,6 +50,15 @@ const EditorToolbar: React.FC = () => {
           }
         >
           Añadir Fila
+        </button>
+        <button
+          onClick={autoFillRows}
+          disabled={trulyAvailableProducts.length === 0}
+          className="bg-amber-200 hover:bg-amber-300 text-white font-bold py-1 px-3 rounded text-sm mr-2 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+          title="Autorellenar filas con productos disponibles"
+          aria-label="Autorellenar filas"
+        >
+          Autorellenar
         </button>
         {trulyAvailableProducts.length === 0 && hasEmptyRows && (
           <button

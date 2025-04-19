@@ -13,9 +13,10 @@ import {
 
 interface RowProps {
   row: EditorRow;
+  isOverlay?: boolean;
 }
 
-const Row: React.FC<RowProps> = ({ row }) => {
+const Row: React.FC<RowProps> = ({ row, isOverlay = false }) => {
   // 1. Drag & drop de la fila completa
   const {
     attributes: rowAttributes,
@@ -203,7 +204,7 @@ const Row: React.FC<RowProps> = ({ row }) => {
         strategy={verticalListSortingStrategy}
       >
         <div
-          className={`flex ${getAlignmentClass()} flex-wrap gap-4 mt-3 pt-2 min-h-[120px]`}
+          className={`flex ${getAlignmentClass()} ${isOverlay ? 'flex-nowrap overflow-x-auto' : 'flex-wrap'} gap-4 mt-3 pt-2 min-h-[120px]`}
         >
           {row.products.length > 0 ? (
             row.products.map((product) => (

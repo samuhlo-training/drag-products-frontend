@@ -340,5 +340,43 @@ export const useCategoryStore = create<CategoryState & CategoryActions>(
 
         return { rows: finalRows };
       }),
+
+    // --- AUTORELLENAR FILAS ---
+    autoFillRows: () =>
+      set((state) => {
+        const MAX_PER_ROW = 3;
+        let rows = [...state.rows];
+        // Productos ya usados (por baseId)
+        const usedBaseIds = rows.flatMap((row) => row.products.map((p) => p.baseId));
+        let availableProducts = state.availableProducts.filter(
+          (p) => !usedBaseIds.includes(p.id)
+        );
+        // 1. Rellenar filas parcialmente llenas
+        rows = rows.map((row) => {
+          if (row.products.length < MAX_PER_ROW && availableProducts.length > 0) {
+            const toAdd = Math.min(MAX_PER_ROW - row.products.length, availableProducts.length);
+            const newProducts = availableProducts.slice(0, toAdd).map((base) => ({
+              ...base,
+              id: uuidv4(),
+              baseId: base.id,
+            }));
+            availableProducts = availableProducts.slice(toAdd);
+            return { ...row, products: [...row.products, ...newProducts] };
+          }
+          return row;
+        });
+        // 2. Crear nuevas filas llenas
+        while (availableProducts.length > 0) {
+          const toAdd = Math.min(MAX_PER_ROW, availableProducts.length);
+          const newProducts = availableProducts.slice(0, toAdd).map((base) => ({
+            ...base,
+            id: uuidv4(),
+            baseId: base.id,
+          }));
+          rows.push({ id: uuidv4(), products: newProducts, template: null });
+          availableProducts = availableProducts.slice(toAdd);
+        }
+        return { rows };
+      }),
   })
 );

@@ -207,7 +207,7 @@ const CategoryEditorView: React.FC = () => {
     if (activeType === "row") {
       // Encontrar la fila activa y renderizarla
       const activeRowData = rows.find((row) => row.id === activeId);
-      return activeRowData ? <Row row={activeRowData} /> : null;
+      return activeRowData ? <Row row={activeRowData} isOverlay={true} /> : null;
     }
 
     if (activeType === "product" && activeData && "productId" in activeData) {
