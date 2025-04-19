@@ -6,6 +6,7 @@ interface ProductSelectorProps {
   usedProducts: Product[];
   onProductSelect: (product: Product) => void;
   onClose: () => void;
+  dropUp?: boolean;
 }
 
 const ProductSelector: React.FC<ProductSelectorProps> = ({
@@ -13,6 +14,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
   usedProducts,
   onProductSelect,
   onClose,
+  dropUp = false,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -40,7 +42,10 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
   };
 
   return (
-    <div className="absolute top-1 z-20 mt-1 w-64 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+    <div
+      className={`absolute z-20 w-64 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto
+        ${dropUp ? "" : "top-1 mt-1"}`}
+    >
       {/* Input Búsqueda */}
       <div className="p-2 sticky top-0 bg-white border-b border-dashed">
         <input

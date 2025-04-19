@@ -184,6 +184,7 @@ const Row: React.FC<RowProps> = ({ row }) => {
               usedProducts={allRows.flatMap((r) => r.products)}
               onProductSelect={handleProductSelected}
               onClose={() => setIsSelectorOpen(false)}
+              dropUp={allRows[allRows.length - 1]?.id === row.id && row.products.length === 0}
             />
           )}
           <button
