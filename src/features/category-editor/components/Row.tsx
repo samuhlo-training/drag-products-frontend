@@ -5,7 +5,7 @@ import ProductSelector from "./ProductSelector";
 import { useCategoryStore } from "../../../store/categoryStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { DndContext } from "@dnd-kit/core";
+import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -20,11 +20,32 @@ const Row: React.FC<RowProps> = ({ row }) => {
   const {
     attributes: rowAttributes,
     listeners: rowListeners,
-    setNodeRef: setRowNodeRef,
+    setNodeRef: setSortableNodeRef,
     transform: rowTransform,
     transition: rowTransition,
     isDragging: isRowDragging,
-  } = useSortable({ id: row.id });
+  } = useSortable({
+    id: row.id,
+    data: {
+      type: "row",
+      row: row, // Podemos pasar la fila completa si es útil
+    },
+  });
+
+  // Para que la Fila sea Zona de Destino de Productos
+  const { setNodeRef: setDroppableNodeRef, isOver } = useDroppable({
+    id: row.id, // Usamos el ID de la fila como ID del droppable
+    data: {
+      type: "row", // Identifica que es una zona de tipo fila
+      accepts: ["product"], // Opcional: especificar qué tipos acepta
+    },
+  });
+
+  // Combinamos los refs si ambos hooks se aplican al mismo nodo
+  const setCombinedNodeRef = (node: HTMLElement | null) => {
+    setSortableNodeRef(node);
+    setDroppableNodeRef(node);
+  };
 
   const zoomLevel = useCategoryStore((state) => state.zoomLevel);
 
@@ -34,6 +55,9 @@ const Row: React.FC<RowProps> = ({ row }) => {
     zIndex: isRowDragging ? 50 : undefined,
     opacity: isRowDragging ? 0.7 : 1,
     cursor: zoomLevel <= 0.5 ? "grab" : "default",
+    border: isOver
+      ? "2px solid oklch(92.5% 0.084 155.995)"
+      : "1px dashed #cbd5e1", // Resalta si un producto está encima
   };
 
   // Estado local para controlar la visibilidad del selector de productos
@@ -63,7 +87,6 @@ const Row: React.FC<RowProps> = ({ row }) => {
     (state) => state.availableProducts
   );
   const allRows = useCategoryStore((state) => state.rows);
-  const moveProductInRow = useCategoryStore((state) => state.moveProductInRow);
 
   const getAlignmentClass = () => {
     switch (row.template) {
@@ -97,27 +120,15 @@ const Row: React.FC<RowProps> = ({ row }) => {
 
   const isRowFull = row.products.length >= 3;
 
-  // Handler de drag & drop para productos de la fila
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function handleDragEnd(event: any) {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-    const oldIndex = row.products.findIndex((p) => p.id === active.id);
-    const newIndex = row.products.findIndex((p) => p.id === over.id);
-    if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-      moveProductInRow(row.id, oldIndex, newIndex);
-    }
-  }
-
   // --- DRAG LISTENERS SEGUN ZOOM ---
   const dragListeners =
     zoomLevel <= 0.5 ? { ...rowAttributes, ...rowListeners } : {};
 
   return (
     <div
-      ref={setRowNodeRef}
+      ref={setCombinedNodeRef}
       style={rowStyle}
-      className={`border border-dashed border-gray-400 p-4 mb-2 bg-white relative min-h-[150px]`}
+      className={`border-gray-400 p-4 mb-2 bg-white relative min-h-[150px]`}
       {...dragListeners}
     >
       {/*Barra de herramientas fila */}
@@ -135,7 +146,8 @@ const Row: React.FC<RowProps> = ({ row }) => {
             <span className="text-[22px] line-height-[1] mb-[3px]">☰</span>
           </button>
           <span>
-            ID: {row.id.substring(0, 6)} - Plantilla: {row.template || "Ninguna"}
+            ID: {row.id.substring(0, 6)} - Plantilla:{" "}
+            {row.template || "Ninguna"}
           </span>
           <span> | </span>
           <select
@@ -184,31 +196,25 @@ const Row: React.FC<RowProps> = ({ row }) => {
           )}
         </div>
       )}
-      {/* DndContext y SortableContext para productos */}
-      <DndContext onDragEnd={handleDragEnd}>
-        <SortableContext
-          items={row.products.map((p) => p.id)}
-          strategy={verticalListSortingStrategy}
+      {/* Eliminamos el DndContext anidado y usamos solo el SortableContext */}
+      <SortableContext
+        items={row.products.map((p) => p.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <div
+          className={`flex ${getAlignmentClass()} flex-wrap gap-4 mt-3 pt-2 min-h-[120px]`}
         >
-          <div
-            className={`flex ${getAlignmentClass()} flex-wrap gap-4 mt-3 pt-2 min-h-[120px]`}
-          >
-            {row.products.length > 0 ? (
-              row.products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  rowId={row.id}
-                />
-              ))
-            ) : (
-              <div className="text-gray-400 w-full text-center flex flex-col items-center justify-center mb-5">
-                Fila vacía
-              </div>
-            )}
-          </div>
-        </SortableContext>
-      </DndContext>
+          {row.products.length > 0 ? (
+            row.products.map((product) => (
+              <ProductCard key={product.id} product={product} rowId={row.id} />
+            ))
+          ) : (
+            <div className="text-gray-400 w-full text-center flex flex-col items-center justify-center mb-5">
+              Fila vacía
+            </div>
+          )}
+        </div>
+      </SortableContext>
     </div>
   );
 };

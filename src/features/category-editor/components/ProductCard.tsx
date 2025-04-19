@@ -20,7 +20,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: product.id });
+  } = useSortable({
+    id: product.id,
+    data: {
+      type: 'product',
+      productId: product.id,
+      rowId: rowId,
+      // Datos para DragOverlay
+      productName: product.name,
+      productPrice: product.price,
+      productImageUrl: product.imageUrl,
+      baseId: product.baseId
+    }
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -77,7 +89,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
         {product.name}
       </p>
       <p className="text-[11px] text-gray-600 w-full text-left">
-        {product.price} EUR
+        {typeof product.price === 'number' ? product.price : product.price} EUR
       </p>
       {/* Botón de eliminar */}
       {zoomLevel >= 0.5 && (

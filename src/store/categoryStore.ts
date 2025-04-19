@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { v4 as uuidv4 } from "uuid";
+// Importa arrayMove de dnd-kit utilities
+import { arrayMove } from "@dnd-kit/sortable";
 import {
   CategoryState,
   CategoryActions,
@@ -272,13 +274,71 @@ export const useCategoryStore = create<CategoryState & CategoryActions>(
         return { rows: newRows };
       }),
 
-    // Acción para mover filas
+    // --- ACCIÓN ORIGINAL: Mover una fila por índices ---
     moveRow: (oldIndex: number, newIndex: number) =>
       set((state) => {
         const newRows = [...state.rows];
         const [removed] = newRows.splice(oldIndex, 1);
         newRows.splice(newIndex, 0, removed);
         return { rows: newRows };
+      }),
+
+    // --- NUEVA ACCIÓN D&D: Mover una fila por IDs ---
+    moveRowById: (activeId: RowId, overId: RowId) => 
+      set((state) => {
+        const oldIndex = state.rows.findIndex((row) => row.id === activeId);
+        const newIndex = state.rows.findIndex((row) => row.id === overId);
+
+        if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) {
+          return state; // No mover si no se encuentran o son el mismo
+        }
+        // Reordenar el array de filas
+        return { rows: arrayMove(state.rows, oldIndex, newIndex) };
+      }),
+
+    // --- NUEVA ACCIÓN D&D: Mover un producto entre filas ---
+    moveProduct: (productId: ProductId, sourceRowId: RowId, targetRowId: RowId) => 
+      set((state) => {
+        const sourceRowIndex = state.rows.findIndex(r => r.id === sourceRowId);
+        const targetRowIndex = state.rows.findIndex(r => r.id === targetRowId);
+
+        if (sourceRowIndex === -1 || targetRowIndex === -1) return state; // No encontrado
+
+        const sourceRow = state.rows[sourceRowIndex];
+        const targetRow = state.rows[targetRowIndex];
+        const productToMove = sourceRow.products.find(p => p.id === productId);
+
+        if (!productToMove) return state; // Producto no encontrado
+
+        // Mover dentro de la misma fila (solo si se implementa reordenamiento interno)
+        if (sourceRowId === targetRowId) {
+          // TODO: Implementar lógica de reordenamiento dentro de la misma fila si es necesario
+          // Por ahora, no hacemos nada si origen y destino son iguales
+          console.log("Mover dentro de la misma fila - Lógica pendiente");
+          return state;
+        }
+
+        // Mover a una fila diferente: verificar límite
+        if (targetRow.products.length >= 3) {
+          console.warn(`La fila destino ${targetRowId} está llena.`);
+          // Podríamos añadir feedback visual al usuario aquí
+          return state;
+        }
+
+        // Crear nuevos arrays de forma inmutable
+        const newSourceProducts = sourceRow.products.filter(p => p.id !== productId);
+        const newTargetProducts = [...targetRow.products, productToMove]; // Añadir al final
+
+        // Crear nuevas filas actualizadas
+        const updatedSourceRow = { ...sourceRow, products: newSourceProducts };
+        const updatedTargetRow = { ...targetRow, products: newTargetProducts };
+
+        // Crear el nuevo array general de filas
+        const finalRows = [...state.rows];
+        finalRows[sourceRowIndex] = updatedSourceRow;
+        finalRows[targetRowIndex] = updatedTargetRow;
+
+        return { rows: finalRows };
       }),
   })
 );
