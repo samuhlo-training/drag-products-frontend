@@ -16,7 +16,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filtrar productos ya presentes en cualquier fila por baseId
+  // Filtrar por baseId
   const filteredAvailableProducts = useMemo(() => {
     if (!usedProducts) return availableProducts;
     return availableProducts.filter(
@@ -24,7 +24,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
     );
   }, [availableProducts, usedProducts]);
 
-  // Filtrar además por búsqueda
+  // Filtrar por busqueda
   const filteredProducts = useMemo(() => {
     if (!searchTerm) {
       return filteredAvailableProducts;
@@ -36,12 +36,12 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
 
   const handleSelect = (product: Product) => {
     onProductSelect(product); // callback a store
-    onClose(); // Cierre
+    onClose();
   };
 
   return (
     <div className="absolute top-1 z-20 mt-1 w-64 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-      {/* Input de Búsqueda */}
+      {/* Input Búsqueda */}
       <div className="p-2 sticky top-0 bg-white border-b border-dashed">
         <input
           type="text"
@@ -52,7 +52,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
         />
       </div>
 
-      {/* Lista de Productos Filtrados */}
+      {/* Lista Productos Filtrados */}
       <ul>
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (

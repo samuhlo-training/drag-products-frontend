@@ -142,7 +142,9 @@ const initialProducts: Product[] = [
 const initialRows: EditorRow[] = [
   {
     id: uuidv4(),
-    products: [{ ...initialProducts[0], id: uuidv4(), baseId: initialProducts[0].id }],
+    products: [
+      { ...initialProducts[0], id: uuidv4(), baseId: initialProducts[0].id },
+    ],
     template: "right",
   },
   {
@@ -213,16 +215,18 @@ export const useCategoryStore = create<CategoryState & CategoryActions>(
     // AÑADIR PRODUCTO A LA FILA
     addProductToRow: (productBase: Product, rowId: RowId) =>
       set((state) => {
-        // Evitar productos repetidos en cualquier fila
+        // Extra de seguridad, para no duplicar
         const isUsed = state.rows.some((row) =>
           row.products.some((p) => p.baseId === productBase.id)
         );
         if (isUsed) {
-          console.warn(`El producto con id ${productBase.id} ya está en alguna fila.`);
+          console.warn(
+            `El producto con id ${productBase.id} ya está en alguna fila.`
+          );
           return state;
         }
 
-        // Encontrar la fila y verificar el límite
+        // Encontrar fila y verificar límite
         const targetRowIndex = state.rows.findIndex((row) => row.id === rowId);
         if (targetRowIndex === -1) return state; // Fila no encontrada (improbable)
 
@@ -254,6 +258,27 @@ export const useCategoryStore = create<CategoryState & CategoryActions>(
         return { rows: updatedRows };
       }),
 
-    // Agregar resto de acciones
+    // Acción para mover productos dentro de una fila
+    moveProductInRow: (rowId: RowId, oldIndex: number, newIndex: number) =>
+      set((state) => {
+        const rowIndex = state.rows.findIndex((row) => row.id === rowId);
+        if (rowIndex === -1) return state;
+        const row = state.rows[rowIndex];
+        const newProducts = [...row.products];
+        const [removed] = newProducts.splice(oldIndex, 1);
+        newProducts.splice(newIndex, 0, removed);
+        const newRows = [...state.rows];
+        newRows[rowIndex] = { ...row, products: newProducts };
+        return { rows: newRows };
+      }),
+
+    // Acción para mover filas
+    moveRow: (oldIndex: number, newIndex: number) =>
+      set((state) => {
+        const newRows = [...state.rows];
+        const [removed] = newRows.splice(oldIndex, 1);
+        newRows.splice(newIndex, 0, removed);
+        return { rows: newRows };
+      }),
   })
 );

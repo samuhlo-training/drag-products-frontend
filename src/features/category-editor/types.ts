@@ -7,7 +7,7 @@ export interface Product {
   name: string;
   price: number; //
   imageUrl: string;
-  baseId?: ProductId; // id del producto base, solo presente en instancias de filas
+  baseId?: ProductId; // id base del producto
 }
 
 export interface EditorRow {
@@ -20,7 +20,6 @@ export interface CategoryState {
   rows: EditorRow[];
   zoomLevel: number;
   availableProducts: Product[];
-  // Next: añadir availableProducts si los obtienes de una API/lista
 }
 
 export interface CategoryActions {
@@ -31,5 +30,7 @@ export interface CategoryActions {
   deleteProduct: (productId: ProductId, rowId: RowId) => void;
   addProductToRow: (productBase: Product, rowId: RowId) => void;
   availableProducts: Product[];
+  moveProductInRow: (rowId: RowId, oldIndex: number, newIndex: number) => void;
+  moveRow: (oldIndex: number, newIndex: number) => void;
   // ... acciones para productos
 }
