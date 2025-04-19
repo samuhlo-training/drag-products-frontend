@@ -161,18 +161,10 @@ const Row: React.FC<RowProps> = ({ row }) => {
             <option value="center">Centro</option>
             <option value="right">Derecha</option>
           </select>
-          <button
-            className="hover:scale-110 transition-transform cursor-pointer text-lg"
-            onClick={handleDeleteRow}
-            title="Eliminar Fila"
-            aria-label={`Eliminar fila ${row.id.substring(0, 6)}`}
-          >
-            🗑️
-          </button>
         </div>
       )}
       {zoomLevel > 0.5 && (
-        <div className="flex items-center justify-end" ref={selectorRef}>
+        <div className="flex items-center justify-end gap-2" ref={selectorRef}>
           <button
             onClick={() => setIsSelectorOpen(!isSelectorOpen)}
             disabled={isRowFull}
@@ -194,6 +186,14 @@ const Row: React.FC<RowProps> = ({ row }) => {
               onClose={() => setIsSelectorOpen(false)}
             />
           )}
+          <button
+            className="bg-red-400 hover:bg-red-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center cursor-pointer"
+            onClick={handleDeleteRow}
+            title="Eliminar Fila"
+            aria-label={`Eliminar fila ${row.id.substring(0, 6)}`}
+          >
+            x
+          </button>
         </div>
       )}
       {/* Eliminamos el DndContext anidado y usamos solo el SortableContext */}
