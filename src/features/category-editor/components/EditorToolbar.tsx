@@ -1,28 +1,73 @@
 import React from "react";
-import { useCategoryStore } from "../../../store/categoryStore"; // Ajusta ruta
+import { useCategoryStore } from "../../../store/categoryStore";
 
 const EditorToolbar: React.FC = () => {
-  // Accedemos a las acciones y estado necesarios del store
   const addRow = useCategoryStore((state) => state.addRow);
+  const rows = useCategoryStore((state) => state.rows);
+  const availableProducts = useCategoryStore(
+    (state) => state.availableProducts
+  );
   const zoomLevel = useCategoryStore((state) => state.zoomLevel);
   const setZoomLevel = useCategoryStore((state) => state.setZoomLevel);
+  const deleteRow = useCategoryStore((state) => state.deleteRow);
+
+  // Filtro de productos disponibles
+  const usedBaseIds = rows.flatMap((row) => row.products.map((p) => p.baseId));
+  const trulyAvailableProducts = availableProducts.filter(
+    (prod) => !usedBaseIds.includes(prod.id)
+  );
+
+  // Filas vacías
+  const emptyRows = rows.filter((row) => row.products.length === 0);
+  const hasEmptyRows = emptyRows.length > 0;
+
+  // Borrar todas las filas vacías
+  const handleDeleteEmptyRows = () => {
+    if (emptyRows.length === 0) return;
+    emptyRows.forEach((row) => deleteRow(row.id));
+  };
 
   const handleZoomIn = () => setZoomLevel(zoomLevel + 0.1);
   const handleZoomOut = () => setZoomLevel(zoomLevel - 0.1);
 
   return (
-    <div className="bg-gray-100 p-2 mb-4 px-2 flex justify-between items-center sticky top-0 z-10 shadow">
-      <button
-        onClick={addRow}
-        className="bg-green-400 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm mr-2"
-      >
-        Añadir Fila
-      </button>
+    <div className="bg-neutral-50 p-2 mb-4 px-2 flex justify-between items-center sticky top-0 z-10 shadow">
+      <div className="flex items-center">
+        <button
+          onClick={addRow}
+          disabled={trulyAvailableProducts.length === 0}
+          className={`bg-green-400 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm mr-2 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400`}
+          title={
+            trulyAvailableProducts.length === 0
+              ? "No hay productos disponibles para agregar"
+              : "Agregar fila"
+          }
+          aria-label={
+            trulyAvailableProducts.length === 0
+              ? "No hay productos disponibles para agregar"
+              : "Agregar fila"
+          }
+        >
+          Añadir Fila
+        </button>
+        {trulyAvailableProducts.length === 0 && hasEmptyRows && (
+          <button
+            onClick={handleDeleteEmptyRows}
+            className="bg-red-400 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm transition-opacity ml-2"
+            title="Eliminar todas las filas vacías"
+            aria-label="Eliminar todas las filas vacías"
+          >
+            Borrar filas vacías
+          </button>
+        )}
+      </div>
       <div className="flex items-center justify-end">
         <button
           onClick={handleZoomOut}
-          disabled={zoomLevel <= 0.2} // Limite inferior
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm mr-1 disabled:opacity-50"
+          disabled={zoomLevel <= 0.2}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm mr-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+          title="Zoom out"
+          aria-label="Zoom out"
         >
           -
         </button>
@@ -34,8 +79,10 @@ const EditorToolbar: React.FC = () => {
         </span>
         <button
           onClick={handleZoomIn}
-          disabled={zoomLevel >= 2.0} // Limite superior
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm ml-1 disabled:opacity-50"
+          disabled={zoomLevel >= 2.0}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded text-sm ml-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+          title="Zoom in"
+          aria-label="Zoom in"
         >
           +
         </button>

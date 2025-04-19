@@ -111,7 +111,7 @@ const Row: React.FC<RowProps> = ({ row }) => {
     <div
       ref={setRowNodeRef}
       style={rowStyle}
-      className={`border border-dashed border-gray-400 p-4 mb-2 bg-gray-50 relative min-h-[150px]`}
+      className={`border border-dashed border-gray-400 p-4 mb-2 bg-white relative min-h-[150px]`}
     >
       {/* DRAG HANDLE DE LA FILA */}
       <div className="absolute top-1 left-2 text-xs text-gray-500 z-10 flex items-center gap-2">

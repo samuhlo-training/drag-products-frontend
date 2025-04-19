@@ -14,7 +14,8 @@ const CategoryEditorView: React.FC = () => {
   const zoomLevel = useCategoryStore((state) => state.zoomLevel);
   const moveRow = useCategoryStore((state) => state.moveRow);
 
-  // Handler para drag & drop de filas
+  // Handler d&d filas
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function handleDragEnd(event: any) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -26,7 +27,7 @@ const CategoryEditorView: React.FC = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white">
       {" "}
       {/* Padding general */}
       <EditorToolbar />

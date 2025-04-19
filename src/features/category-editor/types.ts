@@ -32,5 +32,6 @@ export interface CategoryActions {
   availableProducts: Product[];
   moveProductInRow: (rowId: RowId, oldIndex: number, newIndex: number) => void;
   moveRow: (oldIndex: number, newIndex: number) => void;
+
   // ... acciones para productos
 }
