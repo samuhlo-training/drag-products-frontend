@@ -34,5 +34,10 @@ export interface CategoryActions {
   moveRow: (oldIndex: number, newIndex: number) => void;
   // New D&D actions
   moveRowById: (activeId: RowId, overId: RowId) => void;
-  moveProduct: (productId: ProductId, sourceRowId: RowId, targetRowId: RowId) => void;
+  moveProduct: (
+    productId: ProductId,
+    sourceRowId: RowId,
+    targetRowId: RowId
+  ) => void;
+  autoFillRows: () => void;
 }

@@ -207,7 +207,9 @@ const CategoryEditorView: React.FC = () => {
     if (activeType === "row") {
       // Encontrar la fila activa y renderizarla
       const activeRowData = rows.find((row) => row.id === activeId);
-      return activeRowData ? <Row row={activeRowData} isOverlay={true} /> : null;
+      return activeRowData ? (
+        <Row row={activeRowData} isOverlay={true} />
+      ) : null;
     }
 
     if (activeType === "product" && activeData && "productId" in activeData) {
@@ -227,54 +229,60 @@ const CategoryEditorView: React.FC = () => {
   };
 
   return (
-    <div className="p-4 bg-white">
-      <EditorToolbar />
-      <div className="mt-4 editor-area overflow-auto">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={rowIds}
-            strategy={verticalListSortingStrategy}
-          >
-            {/* El contenedor al que aplicaremos el zoom */}
-            <div
-              style={{
-                transform: `scale(${zoomLevel})`,
-                transformOrigin: "top left",
-                transition: "transform 0.2s ease-out",
-              }}
-              className="space-y-4"
-            >
-              {rows.length > 0 ? (
-                rows.map((row) => <Row key={row.id} row={row} />)
-              ) : (
-                <p className="text-center text-gray-500 mt-10">
-                  No hay filas. ¡Añade una para empezar!
-                </p>
-              )}
-            </div>
-          </SortableContext>
+    <>
+      <h1 className="bg-white text-xl uppercase font-thin text-center px-4">
+        Editor de Categoría
+      </h1>
 
-          {/* DragOverlay para mostrar el elemento arrastrado */}
-          <DragOverlay dropAnimation={null}>
-            <div
-              style={{
-                transform: `scale(${zoomLevel})`,
-                transformOrigin: "top left",
-                transition: "transform 0.2s ease-out",
-                pointerEvents: "none",
-              }}
+      <div className="p-4 bg-white">
+        <EditorToolbar />
+        <div className="mt-4 editor-area overflow-auto">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={rowIds}
+              strategy={verticalListSortingStrategy}
             >
-              {renderDragOverlay()}
-            </div>
-          </DragOverlay>
-        </DndContext>
+              {/* El contenedor al que aplicaremos el zoom */}
+              <div
+                style={{
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: "top left",
+                  transition: "transform 0.2s ease-out",
+                }}
+                className="space-y-4"
+              >
+                {rows.length > 0 ? (
+                  rows.map((row) => <Row key={row.id} row={row} />)
+                ) : (
+                  <p className="text-center text-gray-500 mt-10">
+                    No hay filas. ¡Añade una para empezar!
+                  </p>
+                )}
+              </div>
+            </SortableContext>
+
+            {/* DragOverlay para mostrar el elemento arrastrado */}
+            <DragOverlay dropAnimation={null}>
+              <div
+                style={{
+                  transform: `scale(${zoomLevel})`,
+                  transformOrigin: "top left",
+                  transition: "transform 0.2s ease-out",
+                  pointerEvents: "none",
+                }}
+              >
+                {renderDragOverlay()}
+              </div>
+            </DragOverlay>
+          </DndContext>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
