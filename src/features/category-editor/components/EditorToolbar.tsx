@@ -67,7 +67,9 @@ const EditorToolbar: React.FC = () => {
           Autorellenar
         </button>
         <button
-          onClick={() => window.open("/preview", "_blank")}
+          onClick={() =>
+            window.open(window.location.origin + "/preview", "_blank")
+          }
           className="bg-purple-400 hover:bg-purple-600 text-white font-bold py-1 px-3 rounded text-sm mr-2 cursor-pointer transition-opacity"
           title="Abrir vista previa en una nueva ventana"
           aria-label="Vista previa"
