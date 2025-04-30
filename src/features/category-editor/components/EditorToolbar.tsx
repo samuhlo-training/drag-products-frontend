@@ -1,5 +1,6 @@
 import React from "react";
 import { useCategoryStore } from "../../../store/categoryStore";
+import { useNavigate } from "react-router-dom";
 
 const EditorToolbar: React.FC = () => {
   const addRow = useCategoryStore((state) => state.addRow);
@@ -11,6 +12,7 @@ const EditorToolbar: React.FC = () => {
   const setZoomLevel = useCategoryStore((state) => state.setZoomLevel);
   const deleteRow = useCategoryStore((state) => state.deleteRow);
   const autoFillRows = useCategoryStore((state) => state.autoFillRows);
+  const navigate = useNavigate();
 
   // Filtro de productos disponibles
   const usedBaseIds = rows.flatMap((row) => row.products.map((p) => p.baseId));
@@ -67,9 +69,7 @@ const EditorToolbar: React.FC = () => {
           Autorellenar
         </button>
         <button
-          onClick={() =>
-            window.open(window.location.origin + "/preview", "_blank")
-          }
+          onClick={() => navigate("/preview")}
           className="bg-purple-400 hover:bg-purple-600 text-white font-bold py-1 px-3 rounded text-sm mr-2 cursor-pointer transition-opacity"
           title="Abrir vista previa en una nueva ventana"
           aria-label="Vista previa"
