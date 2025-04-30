@@ -71,4 +71,4 @@ npm run dev
 </p>
 ---
 
-Desarrollado como prueba técnica por Samu Lo.
+Desarrollado como prueba por Samu Lo.
