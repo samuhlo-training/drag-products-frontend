@@ -19,6 +19,7 @@ Editor visual de categorías para e-commerce que permite organizar productos en 
 - **Reordenación y Movimiento de Productos**: Arrastra productos para reordenarlos dentro de una fila o moverlos entre filas
 - **Drag Overlay Inteligente**: El elemento arrastrado se muestra con un overlay que respeta el nivel de zoom del editor para una experiencia visual coherente
 - **Control de Zoom**: Ajustar el nivel de zoom para visualizar mejor el diseño
+- **Vista Previa**: Ver el diseño final de la categoría en una vista previa
 - **UI Responsiva**: Interfaz adaptable a diferentes tamaños de pantalla
 - **Mejoras UX**: Botones de borrado más accesibles y feedback visual durante el drag and drop
 
