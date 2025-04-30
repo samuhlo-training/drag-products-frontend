@@ -1,5 +1,5 @@
 import React from "react";
-import { Product, RowId } from "../types";
+import { Product, RowId } from "../types/types";
 import { useCategoryStore } from "../../../store/categoryStore";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -23,15 +23,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
   } = useSortable({
     id: product.id,
     data: {
-      type: 'product',
+      type: "product",
       productId: product.id,
       rowId: rowId,
       // Datos para DragOverlay
       productName: product.name,
       productPrice: product.price,
       productImageUrl: product.imageUrl,
-      baseId: product.baseId
-    }
+      baseId: product.baseId,
+    },
   });
 
   const style = {
@@ -89,7 +89,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, rowId }) => {
         {product.name}
       </p>
       <p className="text-[11px] text-gray-600 w-full text-left">
-        {typeof product.price === 'number' ? product.price : product.price} EUR
+        {typeof product.price === "number" ? product.price : product.price} EUR
       </p>
       {/* Botón de eliminar */}
       {zoomLevel >= 0.5 && (

@@ -1,5 +1,6 @@
 import React from "react";
 import { useCategoryStore } from "../../store/categoryStore";
+import { useNavigate } from "react-router-dom";
 
 const alignmentMap: Record<string, string> = {
   left: "justify-start",
@@ -9,9 +10,23 @@ const alignmentMap: Record<string, string> = {
 
 const PreviewPage: React.FC = () => {
   const rows = useCategoryStore((state) => state.rows);
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Boton de volver para mayor comodidad */}
+      <header>
+        <button
+          onClick={handleBack}
+          className=" top-4 left-4 bg-red-400 text-white rounded-full w-16 h-8 flex items-center justify-center text-m hover:bg-red-400 active:bg-gray-500 cursor-grab opacity-70 hover:opacity-100 z-20 fixed"
+        >
+          <span className="text-[16px] line-height-[1] mb-[1px]">Volver</span>
+        </button>
+      </header>
       <main className="w-screen-fit mx-8 py-10 px-4 pt-16">
         {rows.length === 0 ? (
           <p className="text-center text-gray-400 text-lg mt-12">

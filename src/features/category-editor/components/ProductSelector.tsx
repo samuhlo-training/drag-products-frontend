@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Product } from "../types";
+import { Product } from "../types/types";
 
 interface ProductSelectorProps {
   availableProducts: Product[];

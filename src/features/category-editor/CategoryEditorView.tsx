@@ -19,39 +19,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import ProductCard from "./components/ProductCard";
-import { Product, RowId } from "./types";
-
-// Define proper types for drag data
-interface ProductDragData {
-  type: "product";
-  productId: string;
-  rowId: string;
-  productName: string;
-  productPrice: number;
-  productImageUrl: string;
-  baseId?: string;
-}
-
-interface RowData {
-  id: string;
-  products: Array<Product>;
-  template: "left" | "center" | "right" | null;
-}
-
-interface RowDragData {
-  type: "row";
-  row: RowData;
-}
-
-interface OverDragData {
-  type?: "row" | "product" | string;
-  rowId?: string;
-  sortable?: {
-    containerId?: string;
-  };
-}
-
-type DragData = ProductDragData | RowDragData;
+import { Product, RowId, DragData, OverDragData } from "./types/types";
 
 const CategoryEditorView: React.FC = () => {
   // Obtener el estado del store Zustand

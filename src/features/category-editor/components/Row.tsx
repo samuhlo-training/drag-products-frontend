@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { EditorRow, Product, TemplateAlignment } from "../types";
+import { EditorRow, Product, TemplateAlignment } from "../types/types";
 import ProductCard from "./ProductCard";
 import ProductSelector from "./ProductSelector";
 import { useCategoryStore } from "../../../store/categoryStore";
@@ -185,7 +185,10 @@ const Row: React.FC<RowProps> = ({ row, isOverlay = false }) => {
               usedProducts={allRows.flatMap((r) => r.products)}
               onProductSelect={handleProductSelected}
               onClose={() => setIsSelectorOpen(false)}
-              dropUp={allRows[allRows.length - 1]?.id === row.id && row.products.length === 0}
+              dropUp={
+                allRows[allRows.length - 1]?.id === row.id &&
+                row.products.length === 0
+              }
             />
           )}
           <button
@@ -204,7 +207,9 @@ const Row: React.FC<RowProps> = ({ row, isOverlay = false }) => {
         strategy={verticalListSortingStrategy}
       >
         <div
-          className={`flex ${getAlignmentClass()} ${isOverlay ? 'flex-nowrap overflow-x-auto' : 'flex-wrap'} gap-4 mt-3 pt-2 min-h-[120px]`}
+          className={`flex ${getAlignmentClass()} ${
+            isOverlay ? "flex-nowrap overflow-x-auto" : "flex-wrap"
+          } gap-4 mt-3 pt-2 min-h-[120px]`}
         >
           {row.products.length > 0 ? (
             row.products.map((product) => (

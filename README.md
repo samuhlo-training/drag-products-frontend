@@ -1,4 +1,4 @@
-# 🛒 Pacman Frontend - Editor de Categorías
+# 🛒 Not A Zara Product Frontend - Editor de Categorías
 
 ![React](https://img.shields.io/badge/React-18-blue?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
@@ -54,7 +54,7 @@ src/
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/samuhlo-training/pacman-frontend.git
+git clone https://github.com/samuhlo-training/not-a-zara-product-frontend.git
 
 # Instalar dependencias
 npm install

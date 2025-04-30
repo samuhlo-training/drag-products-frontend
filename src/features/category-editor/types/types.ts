@@ -41,3 +41,34 @@ export interface CategoryActions {
   ) => void;
   autoFillRows: () => void;
 }
+
+export interface ProductDragData {
+  type: "product";
+  productId: string;
+  rowId: string;
+  productName: string;
+  productPrice: number;
+  productImageUrl: string;
+  baseId?: string;
+}
+
+export interface RowData {
+  id: string;
+  products: Array<Product>;
+  template: "left" | "center" | "right" | null;
+}
+
+export interface RowDragData {
+  type: "row";
+  row: RowData;
+}
+
+export interface OverDragData {
+  type?: "row" | "product" | string;
+  rowId?: string;
+  sortable?: {
+    containerId?: string;
+  };
+}
+
+export type DragData = ProductDragData | RowDragData;

@@ -10,7 +10,7 @@ import {
   Product,
   ProductId,
   RowId,
-} from "../features/category-editor/types";
+} from "../features/category-editor/types/types";
 
 // --- Datos Fake ---
 const initialProducts: Product[] = [
