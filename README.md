@@ -27,7 +27,7 @@
 >
 > <br />
 >
-> **ORIGIN:** Prueba técnica personal.
+> **ORIGIN:** Proyecto personal de experimentación con drag and drop.
 > *Implementado con @dnd-kit para drag and drop accesible y Zustand para gestión de estado.*
 >
 > <br />
