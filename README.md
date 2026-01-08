@@ -1,74 +1,117 @@
-# 🛒 Not A Zara Product Frontend - Editor de Categorías
+<div align="center">
+  <br />
+  <br />
+  
+  # <code>DRAG_PRODUCTS_FRONTEND</code>
+  
+  **DRAG & DROP CATEGORY EDITOR / E-COMMERCE LABORATORY**
+  
+  <br />
 
-![React](https://img.shields.io/badge/React-18-blue?logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
-![Vite](https://img.shields.io/badge/Vite-Latest-purple?logo=vite)
-![Zustand](https://img.shields.io/badge/Zustand-Latest-yellow)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Latest-38B2AC?logo=tailwind-css)
+  <img src="https://img.shields.io/badge/REACT_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TYPESCRIPT_5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/ZUSTAND-433E38?style=for-the-badge&logo=react&logoColor=white" alt="Zustand" />
+  <img src="https://img.shields.io/badge/TAILWIND_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
 
-## 📝 Descripción
+  <br />
+  <br />
+</div>
 
-Editor visual de categorías para e-commerce que permite organizar productos en filas con diferentes plantillas de alineación.
+---
 
-## ✨ Características
+### 00 __ PREVIEW
 
-- **Gestión de Filas**: Añadir y eliminar filas de productos
-- **Reordenación de Filas**: Arrastra y suelta filas para cambiar su orden
-- **Plantillas de Alineación**: Organizar productos con alineación izquierda, centro o derecha
-- **Gestión de Productos**: Añadir y eliminar productos en cada fila (máximo 3 por fila)
-- **Reordenación y Movimiento de Productos**: Arrastra productos para reordenarlos dentro de una fila o moverlos entre filas
-- **Drag Overlay Inteligente**: El elemento arrastrado se muestra con un overlay que respeta el nivel de zoom del editor para una experiencia visual coherente
-- **Control de Zoom**: Ajustar el nivel de zoom para visualizar mejor el diseño
-- **Vista Previa**: Ver el diseño final de la categoría en una vista previa
-- **UI Responsiva**: Interfaz adaptable a diferentes tamaños de pantalla
-- **Mejoras UX**: Botones de borrado más accesibles y feedback visual durante el drag and drop
+![Editor Preview](public/portada_editorcategorias.webp)
 
-## 🛠️ Tecnologías
+> **ABSTRACT:** Editor visual para organización de productos en categorías e-commerce mediante drag & drop avanzado. Sistema de filas con plantillas de alineación (izquierda, centro, derecha) y gestión de productos con reordenación multi-contexto. Overlay inteligente escalable según zoom del editor.
+>
+> <br />
+>
+> **ORIGIN:** Prueba técnica personal.
+> *Implementado con @dnd-kit para drag and drop accesible y Zustand para gestión de estado.*
+>
+> <br />
+>
+> **DEMO:** [products-frontend-rho.vercel.app](https://products-frontend-rho.vercel.app/)
 
-- **React**: Biblioteca para construir interfaces de usuario
-- **TypeScript**: Tipado estático para JavaScript
-- **Zustand**: Gestión de estado ligera y sencilla
-- **TailwindCSS**: Framework CSS utilitario
-- **Vite**: Herramienta de construcción rápida
-- **@dnd-kit/core & @dnd-kit/sortable**: Librerías para drag and drop avanzado y accesible
+---
 
-## 🏗️ Arquitectura
+### 01 __ ARCHITECTURE & DECISIONS
 
-```
-src/
-├── features/
-│   └── category-editor/     # Módulo principal
-│       ├── components/      # Componentes UI (filas, productos, toolbar)
-│       └── types.ts         # Definiciones de tipos
-└── store/
-    └── categoryStore.ts     # Estado global con Zustand
-```
+| COMPONENT | TECH | NOTE |
+| :--- | :--- | :--- |
+| **Core** | `React 18 (Hooks)` | Functional components con TypeScript strict. |
+| **State** | `Zustand` | Single store pattern para categorías y filas. |
+| **Drag & Drop** | `@dnd-kit` | Contexto único para filas y productos. Overlay escalado dinámico. |
+| **Styles** | `TailwindCSS` | Utility-first con configuración custom. |
+| **Build Tool** | `Vite` | Fast HMR y optimización de bundle. |
 
-### 🧩 Sistema Drag and Drop
+<br>
 
-- **Contexto Único**: Un solo `DndContext` en el editor gestiona todas las operaciones de drag and drop para filas y productos.
-- **Overlay Escalable**: El overlay que sigue al cursor durante el drag se escala dinámicamente según el nivel de zoom para mantener la coherencia visual.
-- **Soporte para Reordenación y Movimiento**: Puedes reordenar filas, reordenar productos dentro de la misma fila, o mover productos entre filas arrastrando y soltando.
-- **Tipado Estricto**: El sistema diferencia entre drag de filas y de productos para evitar errores y mejorar la mantenibilidad.
+**KEY PATTERNS:**
+- Feature-based folder structure (`features/category-editor/`)
+- Tipado estricto para drag events (diferenciación fila vs producto)
+- Zoom-aware overlay para coherencia visual durante drag
+- Máximo 3 productos por fila con validación en UI
 
-## 🚀 Instalación y Uso
+<br>
+
+### 02 __ INSTALLATION
+
+*Run local environment:*
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/samuhlo-training/not-a-zara-product-frontend.git
+# 1. Clone
+git clone https://github.com/samuhlo-training/drag-products-frontend.git
 
-# Instalar dependencias
+# 2. Install dependencies
 npm install
 
-# Iniciar servidor de desarrollo
+# 3. Ignite
 npm run dev
 ```
 
-## 📸 Vista Previa
+### 03 __ KEY FEATURES / SNIPPETS
+Lógica destacada de este experimento:
 
-<p align="center">
-  <img src="public/portada_editorcategorias.webp" alt="Portada Editor Categorías" width="500"/>
-</p>
----
+#### A. DRAG OVERLAY ESCALADO
+Sistema de overlay que respeta el zoom del editor para feedback visual coherente.
 
-Desarrollado como prueba por Samu Lo.
+```typescript
+// Overlay escalado dinámicamente según zoom
+<DragOverlay>
+  {activeId && (
+    <div style={{ transform: `scale(${zoomLevel})` }}>
+      {/* Render dragged element */}
+    </div>
+  )}
+</DragOverlay>
+```
+
+#### B. MULTI-CONTEXT DRAG SYSTEM
+Soporte para reordenar filas Y mover productos entre filas con un solo DndContext.
+
+```typescript
+const handleDragEnd = (event: DragEndEvent) => {
+  const { active, over } = event;
+  
+  // Detectar si es drag de fila o producto
+  if (active.id.toString().startsWith('row-')) {
+    // Handle row reordering
+  } else {
+    // Handle product movement/reordering
+  }
+};
+```
+
+<div align="center">
+
+<br />
+
+<code>DESIGNED & CODED BY <a href='https://github.com/samuhlo'>samuhlo</a></code>
+
+<br />
+
+<small>Lugo, Galicia</small>
+
+</div>

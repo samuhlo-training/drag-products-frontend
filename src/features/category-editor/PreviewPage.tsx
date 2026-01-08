@@ -16,7 +16,7 @@ const PreviewPage: React.FC = () => {
     navigate("/");
   };
   //Cambiar titulo de la pagina
-  document.title = "Vista Previa - Not A Zara Product";
+  document.title = "Vista Previa - Drag Products";
 
   return (
     <div className="min-h-screen bg-white">
